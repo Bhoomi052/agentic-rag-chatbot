@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, Text
+from sqlalchemy import Column, Integer, Text, Float
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import declarative_base
-from pgvector.sqlalchemy import Vector
 
 Base = declarative_base()
 
@@ -9,4 +9,4 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True)
     content = Column(Text)
-    embedding = Column(Vector(384))
+    embedding = Column(ARRAY(Float)) 
