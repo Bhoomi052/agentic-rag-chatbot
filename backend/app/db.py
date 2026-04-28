@@ -1,16 +1,4 @@
-import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
+import chromadb
 
-load_dotenv()
-
-DATABASE_URL = (
-    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
-
-# 👇 THIS WAS MISSING
-engine = create_engine(DATABASE_URL)
-
-SessionLocal = sessionmaker(bind=engine)
+client = chromadb.PersistentClient(path="./chroma_store")
+collection = client.get_or_create_collection(name="documents")

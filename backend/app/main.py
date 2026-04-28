@@ -1,17 +1,23 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from backend.app.routes import router
-
-# 👇 add these imports
-from backend.app.models import Base
-from backend.app.db import engine
+import os
 
 app = FastAPI()
 
-# 👇 AUTO CREATE TABLE (IMPORTANT)
-Base.metadata.create_all(bind=engine)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router)
 
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
 @app.get("/")
 def home():
-    return {"message": "RAG API running 🚀"}
+    return FileResponse("frontend/index.html")
